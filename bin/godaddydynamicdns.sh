@@ -8,7 +8,7 @@ NIC=$( grep "nic=" /etc/godaddydns/config.conf | cut -d '=' -f2 )
 
 while [ true ]
 do
-	myip=$(ip a | grep inet | grep -w "$NIC" | awk {'print $2'} | tr '/' ' ' | awk {'print $1'})
+	myip=$(ip a s $NIC | grep -w inet | awk {'print $2'} |cut -d '/' -f1)
 	dnsdata=`curl -s -X GET -H "Authorization: sso-key ${APIKEY}" "https://api.godaddy.com/v1/domains/${DOMAIN}/records/A/${HOSTNAME}"`
 	gdip=`echo $dnsdata | cut -d ',' -f 1 | tr -d '"' | cut -d ":" -f 2`
 	echo $gdip
